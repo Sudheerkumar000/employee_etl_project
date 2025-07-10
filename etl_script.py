@@ -1,6 +1,10 @@
 import pandas as pd
 import boto3
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Step 1: Read raw data
 df = pd.read_csv("employees_raw.csv")
 print("Original Data:\n", df)
@@ -13,24 +17,19 @@ print("\nTransformed Data:\n", df)
 df.to_csv("employees_cleaned.csv", index=False)
 print("\n✅ Cleaned file saved successfully!")
 
-# AWS credentials (for testing only – don't hardcode in production)
-
+# Step 4: AWS credentials from .env
 aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
 aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 
-bucket_name = 'employee-etl-2025-sudheer'  # like sudheer-etl-bucket
+# Step 5: Upload to S3
+bucket_name = 'employee-etl-2025-sudheer'
 s3_key = 'output/employees_cleaned.csv'
-
-# Connect to AWS S3
 s3 = boto3.client(
     's3',
-    aws_access_key_id=aws_access_key,
-    aws_secret_access_key=aws_secret_key,
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key,
     region_name='us-east-1'
 )
 
-# Upload the file
 with open("employees_cleaned.csv", "rb") as f:
     s3.upload_fileobj(f, bucket_name, s3_key)
-
-print("✅ File uploaded to S3 successfully!")
