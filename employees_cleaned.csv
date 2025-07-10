@@ -1,0 +1,6 @@
+id,name,dept,salary,status
+1,John,Engineering,70000,High
+2,Jane,HR,65000,Normal
+3,Sam,Finance,80000,High
+4,Amy,Sales,40000,Normal
+5,Max,Engineering,60000,Normal
